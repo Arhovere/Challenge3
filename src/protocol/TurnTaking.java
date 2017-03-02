@@ -11,6 +11,7 @@ public class TurnTaking implements IMACProtocol {
     private int id = -1;
     private int timeslot = -1;
     private ArrayList<Integer> nodeIDs;
+    private boolean idGiven = false;
 
         @Override
         public TransmissionInfo TimeslotAvailable(MediumState previousMediumState,
@@ -22,18 +23,25 @@ public class TurnTaking implements IMACProtocol {
                 timeslot++;
             }
 
-            if (timeslot < 20 && new Random().nextInt(10) == 1 && id == -1) {
-                id = new Random().nextInt(25665);
-                System.out.println("SLOT - Sending node id");
-                return new TransmissionInfo(TransmissionType.NoData, id);
-            }
-
             if(timeslot < 20 && previousMediumState == MediumState.Succes) {
                 if (nodeIDs == null) {
                     nodeIDs = new ArrayList<>();
                 }
                 nodeIDs.add(controlInformation);
+                if (controlInformation == id) {
+                    idGiven = true;
+                }
             }
+
+            if (timeslot < 20 && new Random().nextInt(10) == 1 && !idGiven) {
+                if (id == -1) {
+                    id = new Random().nextInt(25665);
+                }
+                System.out.println("SLOT - Sending node id");
+                return new TransmissionInfo(TransmissionType.NoData, id);
+            }
+
+
 
             if (timeslot == 20 && nodeIDs.get(0) == id) {
                 if (localQueueLength == 0) {
