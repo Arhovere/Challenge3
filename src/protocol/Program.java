@@ -21,7 +21,7 @@ public class Program implements Runnable {
 	private static String password = "BarrSiobhan";
 
 	// Change to your protocol implementation
-	private static IMACProtocol protocol = new SlottedAlohaSimplified();
+	private static IMACProtocol protocol = new TurnTaking();
 
 	// Challenge server address
 	private static String serverAddress = "netsys.student.utwente.nl";
